@@ -1,117 +1,219 @@
-const WIDTH = 7;
-const HEIGHT = 6;
+// Constants
+const ROWS = 6;
+const COLS = 7;
+const EMPTY = 0;
+const PLAYER_ONE = 1;
+const PLAYER_TWO = 2;
+const WINNING_LENGTH = 4;
 
-let currPlayer = 1; // active player: 1 or 2
-let board = []; // array of rows, each row is array of cells (board[y][x])
+// Variables
+let board = [];
+let currentPlayer = PLAYER_ONE;
+let gameOver = false;
 
-document.addEventListener('DOMContentLoaded', (event) => {
-    const startButton = document.getElementById('startGame');
-    
-    startButton.addEventListener('click', (event) => {
-      // Clear the board first if needed
-      document.getElementById('board').innerHTML = '';
-      // Call your functions to create and display the board
-      makeBoard();
-      makeHtmlBoard();
-    });
-  });
-  
-  function makeHtmlBoard() {
-    const board = document.getElementById('board');
-  
-    // Assuming your board is made of divs with 'row' and 'col' classes
-    for (let row = 0; row < 6; row++) {
-      const rowDiv = document.createElement('div');
-      rowDiv.classList.add('row');
-      for (let col = 0; col < 7; col++) {
-        const colDiv = document.createElement('div');
-        colDiv.classList.add('col');
-        colDiv.addEventListener('click', handleGameClick); // You need to define handleGameClick
-        rowDiv.appendChild(colDiv);
-      }
-      board.appendChild(rowDiv);
+// Elements
+const boardElement = document.getElementById('board');
+const messageElement = document.getElementById('message');
+
+// Initialize the game board
+function initBoard() {
+    for (let row = 0; row < ROWS; row++) {
+        board[row] = [];
+        for (let col = 0; col < COLS; col++) {
+            board[row][col] = EMPTY;
+        }
     }
-  }
-  
-/** makeBoard: create in-memory board structure */
-function makeBoard() {
-  board = [];
-  for (let y = 0; y < HEIGHT; y++) {
-    board.push(Array(WIDTH).fill(null));
-  }
 }
 
-/** makeHtmlBoard: make the HTML board */
-function makeHtmlBoard() {
-  const htmlBoard = document.getElementById('board');
-  htmlBoard.innerHTML = ''; // Clear the board
-
-  // Create slots in the board
-  for (let y = 0; y < HEIGHT; y++) {
-    const row = document.createElement('div');
-    row.className = 'row';
-    for (let x = 0; x < WIDTH; x++) {
-      const cell = document.createElement('div');
-      cell.className = 'col empty';
-      cell.dataset.column = x;
-      cell.dataset.row = y;
-      row.append(cell);
+// Render the game board
+function renderBoard() {
+    boardElement.innerHTML = '';
+    for (let row = 0; row < ROWS; row++) {
+        const rowElement = document.createElement('div');
+        rowElement.classList.add('row');
+        for (let col = 0; col < COLS; col++) {
+            const cellElement = document.createElement('div');
+            cellElement.classList.add('cell');
+            if (board[row][col] === PLAYER_ONE) {
+                cellElement.classList.add('player-one');
+            } else if (board[row][col] === PLAYER_TWO) {
+                cellElement.classList.add('player-two');
+            }
+            rowElement.appendChild(cellElement);
+        }
+        boardElement.appendChild(rowElement);
     }
-    htmlBoard.append(row);
-  }
 }
 
-/** placeInTable: update DOM to place piece into HTML table of board */
-function placeInTable(y, x) {
-  const piece = document.createElement('div');
-  piece.className = `piece player${currPlayer}`;
-  const spot = document.querySelector(`[data-row='${y}'][data-column='${x}']`);
-  spot.append(piece);
-  spot.classList.remove('empty');
+// Handle player moves
+function handleMove(col) {
+    if (gameOver) {
+        return;
+    }
+    for (let row = ROWS - 1; row >= 0; row--) {
+        if (board[row][col] === EMPTY) {
+            board[row][col] = currentPlayer;
+            renderBoard();
+            if (checkWin(row, col)) {
+                gameOver = true;
+                messageElement.textContent = `Player ${currentPlayer} wins!`;
+            } else if (checkDraw()) {
+                gameOver = true;
+                messageElement.textContent = 'Draw!';
+            } else {
+                switchPlayer();
+            }
+            break;
+        }
+    }
 }
 
-/** handleClick: handle click of a column to play piece */
-function handleClick(evt) {
-  // get x from data-column of clicked cell
-  const x = +evt.target.dataset.column;
-
-  // get next spot in column (if none, ignore click)
-  const y = findSpotForCol(x);
-  if (y === null) {
-    return;
-  }
-
-  // place piece in board and add to HTML table
-  board[y][x] = currPlayer;
-  placeInTable(y, x);
-
-  // check for win
-  if (checkForWin()) {
-    return endGame(`Player ${currPlayer} wins!`);
-  }
-
-  // check for tie
-  if (board.every(row => row.every(cell => cell))) {
-    return endGame('Tie!');
-  }
-
-  // switch players
-  currPlayer = currPlayer === 1 ? 2 : 1;
-
-  // if you want to handle changing the color based on the input
-  // you can grab the color from input fields and apply it to the current player piece
+// Check for a win condition
+function checkWin(row, col) {
+    return (
+        checkHorizontal(row) ||
+        checkVertical(row, col) ||
+        checkDiagonal1(row, col) ||
+        checkDiagonal2(row, col)
+    );
 }
 
-/** startGame: starts the game by creating the board */
-function startGame() {
-  makeBoard();
-  makeHtmlBoard();
-  // Add event listener to columns after the HTML board has been created
-  const columns = document.querySelectorAll('.col.empty');
-  columns.forEach(column => column.addEventListener('click', handleClick));
+function checkHorizontal(row) {
+    let count = 0;
+    for (let col = 0; col < COLS; col++) {
+        if (board[row][col] === currentPlayer) {
+            count++;
+            if (count === WINNING_LENGTH) {
+                return true;
+            }
+        } else {
+            count = 0;
+        }
+    }
+    return false;
 }
 
-// Get the start game button and setup its click handler
-document.getElementById('startGame').addEventListener('click', startGame);
+function checkVertical(row, col) {
+    let count = 0;
+    for (let r = row; r < ROWS; r++) {
+        if (board[r][col] === currentPlayer) {
+            count++;
+            if (count === WINNING_LENGTH) {
+                return true;
+            }
+        } else {
+            break;
+        }
+    }
+    return false;
+}
 
-// The rest of your code with the checkForWin and other functions will follow...
+function checkDiagonal1(row, col) {
+    let count = 0;
+    let r = row;
+    let c = col;
+    while (r < ROWS && c < COLS) {
+        if (board[r][c] === currentPlayer) {
+            count++;
+            if (count === WINNING_LENGTH) {
+                return true;
+            }
+        } else {
+            break;
+        }
+        r++;
+        c++;
+    }
+    r = row - 1;
+    c = col - 1;
+    while (r >= 0 && c >= 0) {
+        if (board[r][c] === currentPlayer) {
+            count++;
+            if (count === WINNING_LENGTH) {
+                return true;
+            }
+        } else {
+            break;
+        }
+        r--;
+        c--;
+    }
+    return false;
+}
+
+function checkDiagonal2(row, col) {
+    let count = 0;
+    let r = row;
+    let c = col;
+    while (r < ROWS && c >= 0) {
+        if (board[r][c] === currentPlayer) {
+            count++;
+            if (count === WINNING_LENGTH) {
+                return true;
+            }
+        } else {
+            break;
+        }
+        r++;
+        c--;
+    }
+    r = row - 1;
+    c = col + 1;
+    while (r >= 0 && c < COLS) {
+        if (board[r][c] === currentPlayer) {
+            count++;
+            if (count === WINNING_LENGTH) {
+                return true;
+            }
+        } else {
+            break;
+        }
+        r--;
+        c++;
+    }
+    return false;
+}
+
+// Check for a draw condition
+function checkDraw() {
+    for (let row = 0; row < ROWS; row++) {
+        for (let col = 0; col < COLS; col++) {
+            if (board[row][col] === EMPTY) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+// Switch between players
+function switchPlayer() {
+    currentPlayer = currentPlayer === PLAYER_ONE ? PLAYER_TWO : PLAYER_ONE;
+    messageElement.textContent = `Player ${currentPlayer}'s turn`;
+}
+
+// Reset the game
+function resetGame() {
+    initBoard();
+    renderBoard();
+    currentPlayer = PLAYER_ONE;
+    gameOver = false;
+    messageElement.textContent = `Player ${currentPlayer}'s turn`;
+}
+
+// Event listeners
+boardElement.addEventListener('click', event => {
+    const cellElement = event.target.closest('.cell');
+    if (!cellElement) {
+        return;
+    }
+    const col = cellElement.cellIndex;
+    handleMove(col);
+});
+
+document.getElementById('reset-button').addEventListener('click', resetGame);
+
+// Initialize the game
+initBoard();
+renderBoard();
+messageElement.textContent = `Player ${currentPlayer}'s turn`;

@@ -2,97 +2,156 @@
 
 /* Basic reset */
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-  
-  body {
-    font-family: 'Press Start 2P', cursive; /* A retro-style font */
-    background-color: #f0db4f; /* A bright retro yellow */
-    color: #333;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: start;
-    padding-top: 20px;
-  }
-  
-  h1 {
-    color: #ff4757; /* A vibrant red */
-    text-shadow: 3px 3px 0 #333;
-    margin-bottom: 20px;
-  }
-  
-  #game-setup {
-    margin-bottom: 20px;
-  }
-  
-  #game-setup label {
-    display: block;
-    margin-bottom: 5px;
-  }
-  
-  #game-setup input[type=color] {
-    cursor: pointer;
-    height: 32px;
-    width: 100px;
-    border: none;
-    margin-right: 10px;
-  }
-  
-  #startGame {
-    cursor: pointer;
-    background-color: #2ed573; /* A playful green */
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    font-size: 0.8rem;
-    font-family: inherit;
-    box-shadow: 2px 2px 0 #333;
-  }
-  
-  .board {
-    display: grid;
-    grid-template-columns: repeat(7, 50px);
-    grid-gap: 10px;
-    padding: 10px;
-    border: 5px solid #ff6b81; /* A retro pink border */
-    background-color: #70a1ff; /* Light blue reminiscent of retro game backgrounds */
-  }
-  
-  .col {
-    background-color: #1e90ff; /* A deep blue for the slots */
-    width: 50px;
-    height: 50px;
-    border: 2px solid #333;
-    position: relative;
-    border-radius: 50%; /* Makes the slots round */
-  }
-  
-  .piece {
-    width: 46px; /* Slightly smaller than .col for fitting inside */
-    height: 46px;
-    border-radius: 50%; /* Circle pieces */
-    position: absolute;
-    bottom: 2px;
-    left: 2px;
-  }
-  
-  /* Additional retro styling */
-  body {
-    background-image: url('path/to/your/retro-pattern.png'); /* A retro pattern background */
-    background-repeat: repeat;
-  }
-  
-  button:focus,
-  input:focus {
-    outline: 3px dashed #ff6b81; /* Retro dashed focus outline */
-  }
-  
-  /* Retro hover effect for the button */
-  #startGame:hover {
-    background-color: #1e90ff;
-    box-shadow: 4px 4px 0 #333;
-  }
-  
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+    
+    body {
+        font-family: 'Press Start 2P', cursive; /* A retro-style font */
+        background-color: #f0db4f; /* A bright retro yellow */
+        color: #333;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: start;
+        padding-top: 20px;
+    }
+    
+    h1 {
+        color: #ff4757; /* A vibrant red */
+        text-shadow: 3px 3px 0 #333;
+        margin-bottom: 20px;
+    }
+    
+    #game-setup {
+        margin-bottom: 20px;
+    }
+    
+    #game-setup label {
+        display: block;
+        margin-bottom: 5px;
+    }
+    
+    #game-setup input[type=color] {
+        cursor: pointer;
+        height: 32px;
+        width: 100px;
+        border: none;
+        margin-right: 10px;
+    }
+    
+    #startGame {
+        cursor: pointer;
+        background-color: #2ed573; /* A playful green */
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        font-size: 0.8rem;
+        font-family: inherit;
+        box-shadow: 2px 2px 0 #333;
+    }
+    
+    .board {
+        display: grid;
+        grid-template-columns: repeat(7, 50px);
+        grid-gap: 10px;
+        padding: 10px;
+        border: 5px solid #ff6b81; /* A retro pink border */
+        background-color: #70a1ff; /* Light blue reminiscent of retro game backgrounds */
+    }
+    
+    .col {
+        background-color: #1e90ff; /* A deep blue for the slots */
+        width: 50px;
+        height: 50px;
+        border: 2px solid #333;
+        position: relative;
+        border-radius: 50%; /* Makes the slots round */
+    }
+    
+    .piece {
+        width: 46px; /* Slightly smaller than .col for fitting inside */
+        height: 46px;
+        border-radius: 50%; /* Circle pieces */
+        position: absolute;
+        bottom: 2px;
+        left: 2px;
+    }
+    
+    /* Additional retro styling */
+    body {
+        background-image: url('https://i.imgur.com/9QJ5Z2v.png'); /* A retro pattern background */
+        background-repeat: repeat;
+    }
+    
+    button:focus,
+    input:focus {
+        outline: 3px dashed #ff6b81; /* Retro dashed focus outline */
+    }
+    
+    /* Retro hover effect for the button */
+    #startGame:hover {
+        background-color: #1e90ff;
+        box-shadow: 4px 4px 0 #333;
+    }
+
+    /* Retro styling for the game board */
+    .board {
+        background-image: url('https://i.imgur.com/9QJ5Z2v.png'); /* A retro pattern background */
+        background-repeat: repeat;
+        border-radius: 10px;
+        box-shadow: 5px 5px 0 #333;
+    }
+
+    /* Retro styling for the game pieces */
+    .piece {
+        background-color: #ff4757; /* A vibrant red */
+        box-shadow: 2px 2px 0 #333;
+    }
+
+    /* Retro styling for the game slots */
+    .col {
+        background-color: #f0db4f; /* A bright retro yellow */
+        box-shadow: 2px 2px 0 #333;
+    }
+
+    /* Retro styling for the game title */
+    h1 {
+        font-size: 3rem;
+        text-shadow: 5px 5px 0 #333;
+    }
+
+    /* Retro styling for the game setup */
+    #game-setup {
+        background-color: #f0db4f; /* A bright retro yellow */
+        border-radius: 10px;
+        box-shadow: 5px 5px 0 #333;
+        padding: 20px;
+    }
+
+    /* Retro styling for the game setup label */
+    #game-setup label {
+        font-size: 1.2rem;
+        text-shadow: 2px 2px 0 #333;
+    }
+
+    /* Retro styling for the game setup input */
+    #game-setup input[type=color] {
+        background-color: #f0db4f; /* A bright retro yellow */
+        box-shadow: 2px 2px 0 #333;
+    }
+
+    /* Retro styling for the start game button */
+    #startGame {
+        background-color: #ff4757; /* A vibrant red */
+        box-shadow: 2px 2px 0 #333;
+        font-size: 1.2rem;
+        text-shadow: 2px 2px 0 #333;
+    }
+
+    /* Retro styling for the hover effect on the game slots */
+    .col:hover {
+        background-color: #ff6b81; /* A retro pink */
+        box-shadow: 4px 4px 0 #333;
+    }

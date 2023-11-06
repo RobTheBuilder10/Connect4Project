@@ -9,17 +9,20 @@
 <body>
     <h1>Retro Connect 4</h1>
 
-    <label for="player1Color">Player 1 Color:</label>
-    <input type="color" id="player1Color" name="player1Color" value="#FF0000"> <!-- Default red -->
+    <div id="start-menu">
+        <label for="player1Color">Player 1 Color:</label>
+        <input type="color" id="player1Color" name="player1Color" value="#FF0000"> <!-- Default red -->
 
-    <label for="player2Color">Player 2 Color:</label>
-    <input type="color" id="player2Color" name="player2Color" value="#FFFF00"> <!-- Default yellow -->
+        <label for="player2Color">Player 2 Color:</label>
+        <input type="color" id="player2Color" name="player2Color" value="#FFFF00"> <!-- Default yellow -->
 
-    <button id="startGame">Start Game</button>
+        <button id="startGame">Start Game</button>
+    </div>
 
-    <div id="board"></div>
+    <div id="game-board" style="display:none;">
+        <div id="board"></div>
+    </div>
 
     <script src="js/connect4.js"></script>
 </body>
 </html>
-
